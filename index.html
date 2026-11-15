@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#101611">
+  <title>EMBERLINE — Operação Fronteira</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="game-shell">
+    <canvas id="game" aria-label="Jogo de tiro em primeira pessoa"></canvas>
+    <div id="vignette"></div>
+    <div id="grain"></div>
+
+    <section id="main-menu" class="screen visible">
+      <div class="menu-top"><span class="brand-mark"><i></i> EMBERLINE</span><span class="top-right">UNIDADE DE OPERAÇÕES ESPECIAIS <b>·</b> 04:32 ZULU</span></div>
+      <div class="menu-copy">
+        <p class="eyebrow"><span class="live-dot"></span> OPERAÇÃO ATIVA <span class="eyebrow-line"></span> CORDILHEIRA DE KESTREL</p>
+        <h1>NINGUÉM<br><em>FICA</em> PARA TRÁS.</h1>
+        <p class="tagline">Uma equipe. Um alvo. A noite inteira contra você.</p>
+        <div class="menu-actions">
+          <button class="primary-button" id="campaign-button"><span>01</span> INICIAR CAMPANHA <b>↗</b></button>
+          <button class="secondary-button" id="match-button"><span>02</span> PARTIDA COM BOTS <b>↗</b></button>
+        </div>
+        <div class="mission-note"><span class="note-icon">⌖</span><div><b>OPERAÇÃO: LINHA FANTASMA</b><small>Vale de Kestrel · 03 de novembro · 04:32</small></div></div>
+      </div>
+      <div class="menu-bottom"><span>EMBERLINE <b>///</b> PROTOCOLO DE CAMPO 7.4</span><span>WASD MOVER <b>·</b> MOUSE MIRAR <b>·</b> CLIQUE ATIRAR</span></div>
+      <div class="side-index">01 <span>—</span> 03</div>
+      <div class="menu-crosshair">+</div>
+    </section>
+
+    <section id="briefing" class="screen">
+      <div class="brief-card">
+        <div class="brief-top"><span class="brand-mark"><i></i> EMBERLINE</span><span>ARQUIVO DE MISSÃO / CLASSIFICADO</span><button id="brief-back" class="icon-button" aria-label="Voltar">×</button></div>
+        <p class="eyebrow">BRIEFING DE CAMPO <span class="eyebrow-line"></span> 04:32 ZULU</p>
+        <h2 id="brief-title">LINHA<br><em>FANTASMA</em></h2>
+        <p id="brief-desc" class="brief-description">A interferência tomou o vale. Uma equipe de reconhecimento desapareceu perto da estação de retransmissão. Atravesse o posto avançado, localize o terminal e saia antes do amanhecer.</p>
+        <div class="brief-stats"><div><small>ÁREA</small><b>VALE DE KESTREL</b></div><div><small>AMEAÇA</small><b class="threat">ELEVADA</b></div><div><small>EFETIVO</small><b id="brief-force">OPERAÇÃO SOLO</b></div></div>
+        <div class="brief-controls"><span>W A S D <small>MOVIMENTO</small></span><span>SHIFT <small>CORRER</small></span><span>R <small>RECARREGAR</small></span><span>ESPAÇO <small>ESQUIVAR</small></span></div>
+        <button id="deploy-button" class="primary-button deploy-button"><span>▶</span> <b id="deploy-label">ENTRAR NA ZONA</b><b>↗</b></button>
+      </div>
+    </section>
+
+    <section id="hud" class="hud hidden">
+      <div class="hud-top-left"><div class="mission-pill"><span class="live-dot"></span><div><small id="hud-mode">CAMPANHA · OBJETIVO 01</small><b id="objective-text">INVADA O POSTO AVANÇADO</b></div></div><div class="compass"><span>N</span><i></i><span>NE</span><b>◈</b><span>L</span><i></i><span>SE</span></div></div>
+      <div class="hud-top-right"><div class="team-status"><span class="team-dot"></span><span>ALFA</span><b id="team-count">01 / 01</b><small>OPERACIONAL</small></div><div id="wave-badge" class="wave-badge">SETOR <b>01</b></div></div>
+      <div class="center-marker"><i></i></div>
+      <div class="hit-marker" id="hit-marker"><i></i><i></i><i></i><i></i></div>
+      <div class="hud-bottom-left"><div class="health-wrap"><div class="health-icon">＋</div><div class="health-info"><small>VITALIDADE</small><div class="health-track"><i id="health-bar"></i></div></div><b id="health-value">100</b></div><div class="squad-line"><span class="squad-pip"></span><span id="status-text">SEM CONTATO · AVANCE COM CAUTELA</span></div></div>
+      <div class="hud-bottom-right"><div class="weapon-label"><small>FUZIL DE ASSALTO <span>·</span> MK18</small><b id="weapon-name">M4A1 <i>CARBINE</i></b><span class="weapon-mode">[ AUTO ]</span></div><div class="ammo"><strong id="ammo-mag">30</strong><span>/</span><b id="ammo-reserve">120</b><div class="ammo-icon">▥</div></div><div class="weapon-silhouette">⌁</div></div>
+      <div class="minimap-frame"><div class="map-label">MAPA TÁTICO <span>● AO VIVO</span></div><canvas id="minimap" width="156" height="156"></canvas><div class="map-coords">KESTREL / 04.32.18</div></div>
+      <div id="toast" class="toast"></div>
+      <div id="mobile-controls" class="mobile-controls">
+        <div id="move-stick" class="stick"><div class="stick-ring"></div><div class="stick-knob"></div><small>MOVER</small></div>
+        <div class="mobile-actions"><button id="mobile-reload">↻<small>RECARGAR</small></button><button id="mobile-fire" class="fire-button">✦<small>DISPARAR</small></button></div>
+      </div>
+      <div id="intermission" class="intermission hidden"><small>SETOR SEGURO</small><b>REAGRUPAMENTO</b><span>Prepare-se para o próximo avanço</span></div>
+    </section>
+
+    <section id="pause-screen" class="screen pause-screen">
+      <div class="pause-box"><span class="brand-mark"><i></i> EMBERLINE</span><p class="eyebrow">SINAL INTERROMPIDO</p><h2>PAUSADO<span>.</span></h2><p>A equipe aguarda suas ordens.</p><button id="resume-button" class="primary-button"><span>▶</span> RETOMAR MISSÃO <b>↗</b></button><button id="exit-button" class="secondary-button"><span>×</span> ABANDONAR OPERAÇÃO</button><small>ESC PARA VOLTAR À MISSÃO</small></div>
+    </section>
+    <section id="result-screen" class="screen">
+      <div class="result-box"><span class="brand-mark"><i></i> EMBERLINE</span><p class="eyebrow" id="result-eyebrow">OPERAÇÃO CONCLUÍDA</p><h2 id="result-title">MISSÃO<br><em>CUMPRIDA</em></h2><p id="result-copy">A equipe saiu do vale.</p><div class="result-stats"><div><small>ALVOS NEUTRALIZADOS</small><b id="result-kills">0</b></div><div><small>PRECISÃO</small><b id="result-accuracy">0%</b></div><div><small>TEMPO</small><b id="result-time">00:00</b></div></div><button id="result-button" class="primary-button"><span>↻</span> NOVA OPERAÇÃO <b>↗</b></button><button id="menu-button" class="secondary-button"><span>⌂</span> MENU PRINCIPAL</button></div>
+    </section>
+    <div id="damage-flash"></div>
+    <div class="corner-tag">EL <span>///</span> FIELD SYSTEMS</div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
